@@ -3,4 +3,6 @@ of past cities entered. You can click on that city and be able to go back to tha
 
 https://github.com/Conchettapark/Weather-Dashboard/tree/master
 
+![](weather.png)
+
 
