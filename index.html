@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <!--Links to StyleSheets-->
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+      crossorigin="anonymous"
+    />
+
+    <title>Weather Dashboard</title>
+
+<!--Nav Bar at Top Header-->
+
+    <nav class="navbar navbar-light bg-light">
+      <form class="form-inline">
+        <input
+          class="form-control mr-sm-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+        />
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+          Search
+        </button>
+        <a class="navbar-brand">WEATHER DASHBOARD</a>
+      </form>
+    </nav>
+  </head>
+
+<!--Local Storage List-->
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-3">
+          <ul class="list-group">
+            <li id="cached-1" class="list-group-item"></li>
+            <li id="cached-2" class="list-group-item"></li>
+            <li id="cached-3" class="list-group-item"></li>
+            <li id="cached-4" class="list-group-item"></li>
+            <li id="cached-5" class="list-group-item"></li>
+          </ul>
+        </div>
+<!--Current Weather Display-->
+
+        <div class="col-9">
+          <p1>
+             <img id="icon"></img>
+             <p id="date">Date:</p>
+             <p id="temp">Temperature:</p>
+             <p id="humid">Humidity:</p>
+             <p id="pressure">Air Pressure:</p>
+          </p1>
+        </div>
+      </div>
+
+<!--5 Day Forcast Display-->
+
+<section class="section">
+        <div class="row">
+        <div id="p2" class="col-2">
+          <p2>
+            <img id="icon-1"></img>
+            <p id="date-1">Date:</p>
+            <p id="temp-1">Temperature:</p>
+            <p id="humid-1">Humidity:</p>
+            <p id="pressure-1">Wind Speed:</p>
+          </p2>
+          
+        </div>
+        <div id="p3" class="col-2">
+          <p3>
+            <img id="icon-2"></img>
+            <p id="date-2">Date:</p>
+            <p id="temp-2">Temperature:</p>
+            <p id="humid-2">Humidity:</p>
+            <p id="pressure-2">Wind Speed:</p>
+            </p3>
+        </div>
+        <div id="p4" class="col-2">
+          <p4
+            ><img id="icon-3"></img>
+            <p id="date-3">Date:</p>
+            <p id="temp-3">Temperature:</p>
+            <p id="humid-3">Humidity:</p>
+            <p id="pressure-3">Wind Speed:</p></p4
+          >
+        </div>
+        <div id="p5" class="col-2">
+          <p5
+            ><img id="icon-4"></img>
+            <p id="date-4">Date:</p>
+            <p id="temp-4">Temperature:</p>
+            <p id="humid-4">Humidity:</p>
+            <p id="pressure-4">Wind Speed:</p></p5
+          >
+        </div>
+        <div id="p6" class="col-2">
+          <p6
+            ><img id="icon-5"></img>
+            <p id="date-5">Date:</p>
+            <p id="temp-5">Temperature:</p>
+            <p id="humid-5">Humidity:</p>
+            <p id="pressure-5">Wind Speed:</p></p6
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    //Set up for img icon picture of weather and local storage
+      var storage = window.localStorage;
+      renderCachedCities()
+
+      function getIconURL(iconId) {
+        return `http://openweathermap.org/img/wn/${iconId}@2x.png`
+      }
+
+      function renderCachedCities() {
+        let cachedCities = Object.keys(storage).slice(-5)
+        cachedCities.map((cityName, index) => {
+          document.getElementById(`cached-${index+1}`).innerHTML = cityName
+        })
+      }
+      // Current weather displayed
+      function updateCurrent(response) {
+          var icon = response.weather[0].icon;
+          var dt = response.dt;
+          var temp= response.main.temp; 
+          var humid= response.main.humidity; 
+          var pressure= response.main.pressure;
+          $("#icon").attr("src", getIconURL(icon)); 
+          document.getElementById("date").innerHTML = 'Date: ' + moment.unix(dt).format("MM/DD/YYYY");
+          document.getElementById("temp").innerHTML = 'Temperature:  ' + temp + ' °F'; 
+          document.getElementById("humid").innerHTML = 'Humidity:   ' + humid + ' %'; 
+          document.getElementById("pressure").innerHTML = 'Air Pressure:    ' + pressure + ' atm' ;
+      }
+      //5 day Forcast displayed
+      function updateForecast(response) {
+        var forecastData = {}
+        var listData = response.list
+          listData.map(listItem => {
+            var itemDate = moment.unix(listItem.dt).format("MM/DD/YYYY")
+            if(Object.keys(forecastData).includes(itemDate)){
+            }else {
+              forecastData[itemDate] = listItem
+            }
+          })
+
+          Object.values(forecastData).map((forecastItem, index) => {
+            if(index <5){
+              var icon = forecastItem.weather[0].icon;
+            var dt = forecastItem.dt;
+            var temp= forecastItem.main.temp; 
+            var humid= forecastItem.main.humidity; 
+            var pressure= forecastItem.main.pressure; 
+            $(`#icon-${index+1}`).attr('src', getIconURL(icon))
+            document.getElementById(`date-${index+1}`).innerHTML = 'Date: ' + moment.unix(dt).format("MM/DD/YYYY");
+          document.getElementById(`temp-${index+1}`).innerHTML = 'Temperature:  ' + temp + ' °F'; 
+          document.getElementById(`humid-${index+1}`).innerHTML = 'Humidity:   ' + humid + ' %'; 
+          document.getElementById(`pressure-${index+1}`).innerHTML = 'Air Pressure:    ' + pressure + ' atm' ;
+            }
+          })
+      }
+      //conversion of degrees and date and also local storage to be displayed in a list and then if you click on the list it 
+      //will display that current weather again
+      function updatePage(city){
+        var baseURL = "https://api.openweathermap.org/data/2.5/"
+        var apiKeyParam = "&apikey=6590013de307f56f9a9e952079311387"
+        var currentURL = baseURL + "weather?q=" +
+        encodeURIComponent(city) +
+          "&units=imperial" + apiKeyParam
+
+          var forecastURL = baseURL + "forecast?q=" +encodeURIComponent(city) +
+          "&units=imperial" + apiKeyParam
+
+        var existingData = storage.getItem(city)
+        var existingDataObj = existingData && JSON.parse(existingData)
+
+        if(existingDataObj){
+          updateCurrent(existingDataObj.current)
+          updateForecast(existingDataObj.forecast)
+        } else {
+        $.ajax({
+          url: currentURL,
+          method: "GET",
+        }).then(function (currentResponse) {
+          var existing = storage.getItem(city)
+          var existingObj = existing ? JSON.parse(existing) : {}
+          storage.setItem(city, JSON.stringify({...existingObj, current: currentResponse}));
+          updateCurrent(currentResponse)
+          $.ajax({
+          url: forecastURL,
+          method: "GET",
+        }).then(function (forecastResponse) {
+          var existing = storage.getItem(city)
+          var existingObj = existing ? JSON.parse(existing) : {}
+          storage.setItem(city, JSON.stringify({...existingObj, forecast: forecastResponse}));
+          updateForecast(forecastResponse)
+          renderCachedCities()
+        });
+        });
+        }
+      }
+
+      $(".btn").on("click", function (event) {
+        event.preventDefault();
+        var city = $(".form-control").val();
+        updatePage(city)
+      });
+
+      $("li").on("click", function (event) {
+        event.preventDefault();
+        var city = event.target.innerHTML;
+        updatePage(city)
+      });
+
+
+    </script>
+  </body>
+</html>
